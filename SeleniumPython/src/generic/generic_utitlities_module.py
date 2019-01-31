@@ -9,7 +9,7 @@ from selenium.common.exceptions import ElementNotVisibleException,\
     ElementNotSelectableException, ElementNotInteractableException
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.common.by import By
-from generic import properties_module
+from  SeleniumPython.src.generic import properties_module
 
 
 class Pojo:

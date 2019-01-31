@@ -3,8 +3,8 @@ Created on 31-Jan-2019
 
 @author: Ivavsys
 '''
-from generic.generic_utitlities_module import BaseTest
-from pageFactory.pages_module import HomePage
+from  SeleniumPython.src.generic.generic_utitlities_module import BaseTest
+from  SeleniumPython.src.pageFactory.pages_module import HomePage
 
 class Test(BaseTest):
 
