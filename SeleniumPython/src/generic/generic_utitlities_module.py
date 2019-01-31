@@ -9,6 +9,7 @@ from selenium.common.exceptions import ElementNotVisibleException,\
     ElementNotSelectableException, ElementNotInteractableException
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.common.by import By
+from generic import properties_module
 
 
 class Pojo:
@@ -41,8 +42,11 @@ class BaseTest(Pojo):
         self.obj_init_tear_down=initialize_tear_down_environment()
         self.driver=self.obj_init_tear_down.initialize_web_environment()
         self.set_web_Driver(self.driver)
+        self.web_driver_wait=WebDriverWait(self.driver,properties_module.WEB_DRIVER_WAIT,poll_frequency=1,ignored_exceptions=[ElementNotVisibleException,ElementNotSelectableException,ElementNotInteractableException])
+        self.set_web_driver_wait(self.web_driver_wait)
         obj_wrapper_function=WrapperFunctions(self)
         self.set_wrappeer_function(obj_wrapper_function)
+        
     def tear_down_web_environment(self):
         '''This method is used for termination of web driver and releasing all the resources'''
         self.driver.quit()
@@ -62,19 +66,39 @@ class WrapperFunctions:
         
     def get_element(self,locator):
         try:
-            wait=WebDriverWait(self.obj_pojo.driver,30,poll_frequency=1, ignored_exceptions=[ElementNotVisibleException,ElementNotSelectableException,ElementNotInteractableException])
+            wait=self.obj_pojo.get_web_driver_wait()
             element=wait.until(expected_conditions.presence_of_element_located((By.XPATH,locator)))
         except Exception as exception:
             print("Caught An Exception for get element",exception)
         return element
+
+    def get_text(self,locator):
+        '''This method is used to click the element for provided locator'''
+        try:
+            element=self.get_element(locator)
+            text=element.text
+        except Exception as exception:
+            print("Caught An Exception for get element",exception)
+        return text
+    
+    def set_text(self,locator,text_to_set):
+        try:
+            element=self.get_element(locator)
+            element.send_keys(text_to_set)
+        except Exception as exception:
+            print("Caught an Exception in set Text",exception)
+        
+            
+            
+            
     
 class initialize_tear_down_environment:
     
     def initialize_web_environment(self):
         '''This method initializes web driver and opens an instance of given web browser'''
         self.driver=webdriver.Chrome()
-        self.driver.get('https://www.seleniumeasy.com/test/')
+        self.driver.get(properties_module.URL)
         self.driver.maximize_window()
-        self.driver.set_page_load_timeout(30)
+        self.driver.set_page_load_timeout(properties_module.PAGE_LOAD_TIMEOUT)
         return self.driver
 
