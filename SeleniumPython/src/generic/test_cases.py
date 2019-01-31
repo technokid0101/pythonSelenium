@@ -6,6 +6,7 @@ Created on 29-Jan-2019
 from generic import pages
 from selenium import webdriver
 import unittest
+import time
 
 class TestCases(unittest.TestCase):
        
@@ -45,8 +46,37 @@ class TestCases(unittest.TestCase):
             print("PASS")
         else:
             print("FAIL")
+    
+    def verify_mutli_select_list(self):
+        '''Muilti Select List'''
+        li=['California','Florida']
+        self.obj_home_page.click_input_form_demo()
+        self.obj_home_page.click_select_dropdown_list()
+        self.obj_home_page.multi_select_list_demo(li)
+    
+    def verify_bootstrap_date_picker(self):
+        self.obj_home_page.click_date_picker_link()
+        self.obj_home_page.click_bootstrap_date_picker()
+        self.obj_home_page.click_date_picker()
+        self.obj_home_page.verify_bootstrap_date_picker('2019-01-29')
         
-
+    def verify_table_filter_search(self):
+        '''Handling Dynamic Table'''
+        time.sleep(3) 
+        self.obj_home_page.click_table_link()
+        self.obj_home_page.click_table_search_link()
+        li=["Wireframes","Landing Page"]
+        for x in li:
+            self.obj_home_page.set_table_filter_text(x)
+            time.sleep(3)
+            actual_text=self.obj_home_page.get_table_data(1, 2)
+            print(x+"   "+actual_text)
+            if x in actual_text:
+                print("PASS")
+            else:
+                print("FAIL")
+            self.driver.refresh()
+        
     def _tearDown_(self):
         self.driver.quit()
         
