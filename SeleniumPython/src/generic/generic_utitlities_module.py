@@ -87,7 +87,8 @@ class WrapperFunctions:
             element.send_keys(text_to_set)
         except Exception as exception:
             print("Caught an Exception in set Text",exception)
-        
+        finally:
+            print("Finally Block")
             
             
             
